@@ -1,0 +1,351 @@
+slip 16
+
+q2
+
+/////////java file
+
+package com.example.testing;
+
+import android.app.TimePickerDialog;
+import android.os.Bundle;
+import android.widget.Button;
+import android.widget.TextView;
+import android.widget.TimePicker;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import java.util.Calendar;
+
+public class MainActivity extends AppCompatActivity {
+
+    private TextView selectedTimeTextView;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        Button pickTimeButton = findViewById(R.id.button_pick_time);
+        selectedTimeTextView = findViewById(R.id.text_view_selected_time);
+
+        // Set a click listener to show TimePickerDialog when the button is clicked
+        pickTimeButton.setOnClickListener(v -> showTimePickerDialog());
+    }
+
+    private void showTimePickerDialog() {
+        // Get the current time
+        final Calendar c = Calendar.getInstance();
+        int hour = c.get(Calendar.HOUR_OF_DAY);
+        int minute = c.get(Calendar.MINUTE);
+
+        // Create a new instance of TimePickerDialog and show it
+        TimePickerDialog timePickerDialog = new TimePickerDialog(this,
+                (view, hourOfDay, minuteOfDay) -> {
+                    // Display the selected time in the TextView
+                    selectedTimeTextView.setText(String.format("%02d:%02d", hourOfDay, minuteOfDay));
+                }, hour, minute, true);
+        timePickerDialog.show();
+    }
+}
+
+////////////xml file
+
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    tools:context=".MainActivity">
+
+    <Button
+        android:id="@+id/button_pick_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Pick Time"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp" />
+
+    <TextView
+        android:id="@+id/text_view_selected_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:layout_below="@id/button_pick_time"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="24dp" />
+
+</RelativeLayout>
+
+
+==========================================================================
+
+q1
+
+main activity java
+
+package com.example.testing;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.TableLayout;
+import android.widget.TableRow;
+import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+public class MainActivity extends AppCompatActivity {
+
+    private EditText nameEditText, surnameEditText, classEditText, hobbiesEditText, marksEditText;
+    private Spinner genderSpinner;
+    private Button submitButton;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        nameEditText = findViewById(R.id.edit_text_name);
+        surnameEditText = findViewById(R.id.edit_text_surname);
+        classEditText = findViewById(R.id.edit_text_class);
+        genderSpinner = findViewById(R.id.spinner_gender);
+        hobbiesEditText = findViewById(R.id.edit_text_hobbies);
+        marksEditText = findViewById(R.id.edit_text_marks);
+        submitButton = findViewById(R.id.button_submit);
+
+        submitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                displayDetails();
+            }
+        });
+    }
+
+    private void displayDetails() {
+        String name = nameEditText.getText().toString();
+        String surname = surnameEditText.getText().toString();
+        String studentClass = classEditText.getText().toString();
+        String gender = genderSpinner.getSelectedItem() != null ? genderSpinner.getSelectedItem().toString() : "";
+        String hobbies = hobbiesEditText.getText().toString();
+        String marks = marksEditText.getText().toString();
+
+        // Check if any of the EditText fields are null
+        if (name.isEmpty() || surname.isEmpty() || studentClass.isEmpty() || hobbies.isEmpty() || marks.isEmpty()) {
+            // Display a toast or handle the error appropriately
+            return;
+        }
+
+        Intent intent = new Intent(MainActivity.this, DisplayDetailsActivity.class);
+        intent.putExtra("name", name);
+        intent.putExtra("surname", surname);
+        intent.putExtra("class", studentClass);
+        intent.putExtra("gender", gender);
+        intent.putExtra("hobbies", hobbies);
+        intent.putExtra("marks", marks);
+        startActivity(intent);
+    }
+
+}
+
+
+/////////DisplayDetaislActivity java
+
+package com.example.testing;
+
+import android.os.Bundle;
+import android.widget.TableLayout;
+import android.widget.TableRow;
+import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+public class DisplayDetailsActivity extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_display_details);
+
+        // Retrieve student details from intent
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            String name = extras.getString("name");
+            String surname = extras.getString("surname");
+            String studentClass = extras.getString("class");
+            String gender = extras.getString("gender");
+            String hobbies = extras.getString("hobbies");
+            String marks = extras.getString("marks");
+
+            // Display student details in a table
+            displayStudentDetails(name, surname, studentClass, gender, hobbies, marks);
+        }
+    }
+
+    private void displayStudentDetails(String name, String surname, String studentClass, String gender, String hobbies, String marks) {
+        TextView titleTextView = findViewById(R.id.text_view_title);
+        titleTextView.setText("Student Details");
+
+        TableLayout tableLayout = findViewById(R.id.table_layout_details);
+
+        // Create and add table rows for each detail
+        addTableRow(tableLayout, "Name", name);
+        addTableRow(tableLayout, "Surname", surname);
+        addTableRow(tableLayout, "Class", studentClass);
+        addTableRow(tableLayout, "Gender", gender);
+        addTableRow(tableLayout, "Hobbies", hobbies);
+        addTableRow(tableLayout, "Marks", marks);
+    }
+
+    private void addTableRow(TableLayout tableLayout, String label, String value) {
+        TableRow row = new TableRow(this);
+
+        TextView labelTextView = new TextView(this);
+        labelTextView.setText(label);
+        row.addView(labelTextView);
+
+        TextView valueTextView = new TextView(this);
+        valueTextView.setText(value);
+        row.addView(valueTextView);
+
+        tableLayout.addView(row);
+    }
+}
+
+//////////main .xml
+
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    tools:context=".MainActivity">
+
+    <EditText
+        android:id="@+id/edit_text_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Name"
+        android:inputType="text" />
+
+    <EditText
+        android:id="@+id/edit_text_surname"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/edit_text_name"
+        android:layout_marginTop="16dp"
+        android:hint="Surname"
+        android:inputType="text" />
+
+    <EditText
+        android:id="@+id/edit_text_class"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/edit_text_surname"
+        android:layout_marginTop="16dp"
+        android:hint="Class"
+        android:inputType="text" />
+
+    <Spinner
+        android:id="@+id/spinner_gender"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/edit_text_class"
+        android:layout_marginTop="16dp" />
+
+    <EditText
+        android:id="@+id/edit_text_hobbies"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/spinner_gender"
+        android:layout_marginTop="16dp"
+        android:hint="Hobbies"
+        android:inputType="textMultiLine" />
+
+    <EditText
+        android:id="@+id/edit_text_marks"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/edit_text_hobbies"
+        android:layout_marginTop="16dp"
+        android:hint="Marks"
+        android:inputType="numberDecimal" />
+
+    <Button
+        android:id="@+id/button_submit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/edit_text_marks"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="24dp"
+        android:text="Submit" />
+
+</RelativeLayout>
+
+////activity_display_details xml
+
+
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/text_view_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Student Details"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TableLayout
+            android:id="@+id/table_layout_details"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:stretchColumns="*" />
+
+    </ScrollView>
+
+</LinearLayout>
+
+
+//////manifest file
+
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <application
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.Testing"
+        tools:targetApi="31">
+        <activity
+            android:name=".MainActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".DisplayDetailsActivity"></activity>
+    </application>
+
+</manifest>

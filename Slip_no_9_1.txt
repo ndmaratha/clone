@@ -1,0 +1,102 @@
+MainActivity.java
+
+package com.example.slip_no_9_1;
+
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
+
+public class MainActivity extends AppCompatActivity {
+
+    private EditText firstNumberEditText;
+    private EditText secondNumberEditText;
+    private Button submitButton;
+    private TextView resultTextView;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        firstNumberEditText = findViewById(R.id.first_number_edit_text);
+        secondNumberEditText = findViewById(R.id.second_number_edit_text);
+        submitButton = findViewById(R.id.submit_button);
+        resultTextView = findViewById(R.id.result_text_view);
+
+        submitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                submitNumbers();
+            }
+        });
+    }
+
+    private void submitNumbers() {
+        String firstNumberStr = firstNumberEditText.getText().toString();
+        String secondNumberStr = secondNumberEditText.getText().toString();
+
+        if (firstNumberStr.isEmpty() || secondNumberStr.isEmpty()) {
+            Toast.makeText(this, "Please enter both numbers", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        int firstNumber = Integer.parseInt(firstNumberStr);
+        int secondNumber = Integer.parseInt(secondNumberStr);
+
+        if (firstNumber > 10 && secondNumber > 10) {
+            Toast.makeText(this, "Both numbers cannot be greater than 10", Toast.LENGTH_SHORT).show();
+            firstNumberEditText.setText("");
+            secondNumberEditText.setText("");
+            resultTextView.setText("");
+        } else {
+            resultTextView.setText("First Number: " + firstNumber + "\nSecond Number: " + secondNumber);
+        }
+    }
+}
+
+
+Xml
+
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <EditText
+        android:id="@+id/first_number_edit_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter first number"
+        android:inputType="number"/>
+
+    <EditText
+        android:id="@+id/second_number_edit_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter second number"
+        android:layout_below="@id/first_number_edit_text"
+        android:layout_marginTop="8dp"
+        android:inputType="number"/>
+
+    <Button
+        android:id="@+id/submit_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Submit"
+        android:layout_below="@id/second_number_edit_text"
+        android:layout_marginTop="16dp"/>
+
+    <TextView
+        android:id="@+id/result_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:layout_below="@id/submit_button"
+        android:layout_marginTop="16dp"/>
+
+</RelativeLayout>

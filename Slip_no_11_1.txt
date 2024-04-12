@@ -1,0 +1,180 @@
+package com.example.slip_no_10_1;
+import android.graphics.Color;
+import android.graphics.Typeface;
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class MainActivity extends AppCompatActivity {
+
+    private EditText inputText;
+    private Spinner fontSizeSpinner;
+    private Spinner fontColorSpinner;
+    private Spinner fontFamilySpinner;
+    private TextView displayText;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        inputText = findViewById(R.id.input_text);
+        fontSizeSpinner = findViewById(R.id.font_size_spinner);
+        fontColorSpinner = findViewById(R.id.font_color_spinner);
+        fontFamilySpinner = findViewById(R.id.font_family_spinner);
+        displayText = findViewById(R.id.display_text);
+
+        setupFontFamilySpinner();
+        setupFontSizeSpinner();
+        setupFontColorSpinner();
+    }
+
+    private void setupFontFamilySpinner() {
+        List<String> fontFamilies = new ArrayList<>();
+        fontFamilies.add("Default");
+        fontFamilies.add("Monospace");
+        fontFamilies.add("Sans Serif");
+        fontFamilies.add("Serif");
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, fontFamilies);
+        fontFamilySpinner.setAdapter(adapter);
+    }
+
+    private void setupFontSizeSpinner() {
+        List<String> fontSizes = new ArrayList<>();
+        fontSizes.add("Small");
+        fontSizes.add("Medium");
+        fontSizes.add("Large");
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, fontSizes);
+        fontSizeSpinner.setAdapter(adapter);
+    }
+
+    private void setupFontColorSpinner() {
+        List<String> fontColors = new ArrayList<>();
+        fontColors.add("Black");
+        fontColors.add("Red");
+        fontColors.add("Blue");
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, fontColors);
+        fontColorSpinner.setAdapter(adapter);
+    }
+
+    public void displayText(View view) {
+        String text = inputText.getText().toString().trim();
+        if (!TextUtils.isEmpty(text)) {
+            displayText.setText(text);
+
+            // Set font size
+            String selectedFontSize = fontSizeSpinner.getSelectedItem().toString();
+            switch (selectedFontSize) {
+                case "Small":
+                    displayText.setTextSize(18);
+                    break;
+                case "Medium":
+                    displayText.setTextSize(24);
+                    break;
+                case "Large":
+                    displayText.setTextSize(30);
+                    break;
+            }
+
+            // Set font color
+            String selectedFontColor = fontColorSpinner.getSelectedItem().toString();
+            switch (selectedFontColor) {
+                case "Black":
+                    displayText.setTextColor(Color.BLACK);
+                    break;
+                case "Red":
+                    displayText.setTextColor(Color.RED);
+                    break;
+                case "Blue":
+                    displayText.setTextColor(Color.BLUE);
+                    break;
+            }
+
+            // Set font family
+            String selectedFontFamily = fontFamilySpinner.getSelectedItem().toString();
+            switch (selectedFontFamily) {
+                case "Default":
+                    displayText.setTypeface(Typeface.DEFAULT);
+                    break;
+                case "Monospace":
+                    displayText.setTypeface(Typeface.MONOSPACE);
+                    break;
+                case "Sans Serif":
+                    displayText.setTypeface(Typeface.SANS_SERIF);
+                    break;
+                case "Serif":
+                    displayText.setTypeface(Typeface.SERIF);
+                    break;
+            }
+        }
+    }
+}
+
+
+
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    tools:context=".MainActivity">
+
+    <EditText
+        android:id="@+id/input_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter Text"
+        android:layout_marginBottom="16dp"/>
+
+    <Spinner
+        android:id="@+id/font_size_spinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/input_text"
+        android:layout_marginBottom="16dp" />
+
+    <Spinner
+        android:id="@+id/font_color_spinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/font_size_spinner"
+        android:layout_marginBottom="16dp"
+        />
+
+    <Spinner
+        android:id="@+id/font_family_spinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/font_color_spinner"
+        android:layout_marginBottom="16dp"
+        />
+
+    <Button
+        android:id="@+id/display_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Display Text"
+        android:layout_below="@id/font_family_spinner"
+        android:onClick="displayText"/>
+
+    <TextView
+        android:id="@+id/display_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Display Text"
+        android:textSize="16sp"
+        android:layout_below="@id/display_button"/>
+
+</RelativeLayout>
