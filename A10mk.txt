@@ -1,0 +1,586 @@
+Slip-1,14
+Q1. Create a Simple Application which shows the Life Cycle of Activity.
+package com.example.activitylifecycle;
+import androidx.appcompat.app.AppCompatActivity;
+import android.os.Bundle;
+import android.util.Log;
+public class MainActivity extends AppCompatActivity {
+private static final String Tag = "activitylifecycle";
+ @Override
+ protected void onCreate(Bundle savedInstanceState) {
+ super.onCreate(savedInstanceState);
+ setContentView(R.layout.activity_main);
+ Log.d(Tag, "onstart() method called");
+ }
+ protected void onStart() {
+ super.onResume();
+ Log.d(Tag, "onstart() method called");
+ }
+ protected void onResume() {
+ super.onResume();
+ Log.d(Tag, "onResume()method called");
+ }
+ protected void onStop() {
+ super.onStop();
+ Log.d(Tag, "onStop()method called");
+ }
+ protected void onRestart() {
+ super.onRestart();
+ Log.d(Tag, "onRestart() method called");
+ }
+ protected void onDestroy() {
+ super.onDestroy();
+ Log.d(Tag, "onDestroy() method called");
+ }
+}
+Slip-2,4
+Q2. Create a Simple Application, which reads a number from the user and check whether it is 
+even or odd.
+Xml file
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+ xmlns:app="http://schemas.android.com/apk/res-auto"
+ xmlns:tools="http://schemas.android.com/tools"
+ android:layout_width="match_parent"
+ android:layout_height="match_parent"
+ tools:context=".MainActivity"
+ android:orientation="vertical" >
+ <TextView
+ android:layout_width="wrap_content"
+ android:layout_height="wrap_content"
+ android:text=" Check The Number is Even or Odd!"
+ />
+ <EditText
+ android:layout_width="wrap_content"
+ android:layout_height="wrap_content"
+ android:hint="enter the number"
+ android:id="@+id/e1"/>
+ <Button
+ android:layout_width="wrap_content"
+ android:layout_height="wrap_content"
+ android:text="check"
+ android:id="@+id/b1"/>
+ <TextView
+ android:layout_width="wrap_content"
+ android:layout_height="wrap_content"
+ android:text=""
+ android:id="@+id/t1" />
+</LinearLayout>
+Java code
+package com.example.evenorodd;
+import androidx.appcompat.app.AppCompatActivity;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+public class MainActivity extends AppCompatActivity {
+ EditText e1;
+ Button b1;
+ TextView t1;
+ @Override
+ protected void onCreate(Bundle savedInstanceState) {
+ super.onCreate(savedInstanceState);
+ setContentView(R.layout.activity_main);
+ e1 = findViewById(R.id.e1);
+ b1 = findViewById(R.id.b1);
+ t1 = findViewById(R.id.t1);
+ b1.setOnClickListener(new View.OnClickListener() {
+ @Override
+ public void onClick(View v) {
+ int number = Integer.parseInt(e1.getText().toString());
+ number = number % 2;
+ if (number == 0) {
+ t1.setText("even");
+ } else {
+ t1.setText("odd");
+ }
+ }
+ });
+ }
+}
+Slip -3
+Q3. . Create an Android Application that Demonstrate Check Box.
+Xml code
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+ xmlns:android="http://schemas.android.com/apk/res/android"
+ android:layout_width="match_parent"
+ android:layout_height="match_parent"
+ android:orientation="vertical"
+ android:padding="16dp">
+ <CheckBox
+ android:id="@+id/checkBox"
+ android:layout_width="wrap_content"
+ android:layout_height="wrap_content"
+ android:text="Painting" />
+ <CheckBox
+ android:id="@+id/checkBox2"
+ android:layout_width="wrap_content"
+ android:layout_height="wrap_content"
+ android:text="Reading" />
+ <CheckBox
+ android:id="@+id/checkBox3"
+ android:layout_width="wrap_content"
+ android:layout_height="wrap_content"
+ android:text="Singing" />
+ <CheckBox
+ android:id="@+id/checkBox4"
+ android:layout_width="wrap_content"
+ android:layout_height="wrap_content"
+ android:text="Cooking" />
+ <Button
+ android:id="@+id/btnCheck"
+ android:layout_width="wrap_content"
+ android:layout_height="wrap_content"
+ android:text="Submit"
+ android:onClick="checkHobbies" />
+</LinearLayout>
+Java code
+package com.example.checkbox;
+import android.app.Activity;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.CheckBox;
+import android.widget.Toast;
+import com.example.checkbox.R;
+public class MainActivity extends Activity {
+ private CheckBox ch, ch1, ch2, ch3;
+ @Override
+ protected void onCreate(Bundle savedInstanceState) {
+ super.onCreate(savedInstanceState);
+ setContentView(R.layout.activity_main);
+ ch = findViewById(R.id.checkBox);
+ ch1 = findViewById(R.id.checkBox2);
+ ch2 = findViewById(R.id.checkBox3);
+ ch3 = findViewById(R.id.checkBox4);
+ }
+ public void checkHobbies(View v) {
+ StringBuilder selectedHobbies = new StringBuilder();
+ if (ch.isChecked()) {
+ selectedHobbies.append("Painting ");
+ }
+ if (ch1.isChecked()) {
+ selectedHobbies.append("Reading ");
+ }
+ if (ch2.isChecked()) {
+ selectedHobbies.append("Singing ");
+ }
+ if (ch3.isChecked()) {
+ selectedHobbies.append("Cooking ");
+ }
+ if (selectedHobbies.length() > 0) {
+ Toast.makeText(this, selectedHobbies.toString() + "are selected", Toast.LENGTH_LONG).show();
+ } else {
+ Toast.makeText(this, "No hobbies selected", Toast.LENGTH_SHORT).show();
+ }
+ }
+}
+slip 4
+Q1.Create an Android Application to accept two numbers and find power and Average.
+import android.app.Activity;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+public class MainActivity extends Activity {
+ private EditText etNumber1, etNumber2;
+ private TextView tvResult;
+ @Override
+ protected void onCreate(Bundle savedInstanceState) {
+ super.onCreate(savedInstanceState);
+ setContentView(R.layout.activity_main);
+ etNumber1 = findViewById(R.id.etNumber1);
+ etNumber2 = findViewById(R.id.etNumber2);
+ tvResult = findViewById(R.id.tvResult);
+ Button btnCalculatePower = findViewById(R.id.btnCalculatePower);
+ btnCalculatePower.setOnClickListener(new View.OnClickListener() {
+ @Override
+ public void onClick(View v) {
+ calculatePower();
+ }
+ });
+ Button btnCalculateAverage = findViewById(R.id.btnCalculateAverage);
+ btnCalculateAverage.setOnClickListener(new View.OnClickListener() {
+ @Override
+ public void onClick(View v) {
+ calculateAverage();
+ }
+ });
+ }
+ private void calculatePower() {
+ double num1 = Double.parseDouble(etNumber1.getText().toString());
+ double num2 = Double.parseDouble(etNumber2.getText().toString());
+ double result = Math.pow(num1, num2);
+ tvResult.setText("Power: " + result);
+ }
+ private void calculateAverage() {
+ double num1 = Double.parseDouble(etNumber1.getText().toString());
+ double num2 = Double.parseDouble(etNumber2.getText().toString());
+ double average = (num1 + num2) / 2;
+ tvResult.setText("Average: " + average);
+ }
+}
+Xml code
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+ xmlns:android="http://schemas.android.com/apk/res/android"
+ android:layout_width="match_parent"
+ android:layout_height="match_parent"
+ android:orientation="vertical"
+ android:padding="16dp">
+ <EditText
+ android:id="@+id/etNumber1"
+ android:layout_width="match_parent"
+ android:layout_height="wrap_content"
+ android:hint="Enter first number"
+ android:inputType="numberDecimal" />
+ <EditText
+ android:id="@+id/etNumber2"
+ android:layout_width="match_parent"
+ android:layout_height="wrap_content"
+ android:hint="Enter second number"
+ android:inputType="numberDecimal" />
+ <Button
+ android:id="@+id/btnCalculatePower"
+ android:layout_width="wrap_content"
+ android:layout_height="wrap_content"
+ android:text="Calculate Power"
+ android:onClick="calculatePower" />
+ <Button
+ android:id="@+id/btnCalculateAverage"
+ android:layout_width="wrap_content"
+ android:layout_height="wrap_content"
+ android:text="Calculate Average"
+ android:onClick="calculateAverage" />
+ <TextView
+ android:id="@+id/tvResult"
+ android:layout_width="match_parent"
+ android:layout_height="wrap_content"
+ android:layout_marginTop="16dp"
+ android:textSize="18sp" />
+</LinearLayout>
+Slip 6,8,12,15
+Q1.Create a Simple Application Which Send ―Hello! message from one activity to another with help of Button (Use 
+Intent).
+Java 1
+package com.example.myapplication1;
+import androidx.appcompat.app.AppCompatActivity;
+import android.os.Bundle;
+import android.content.Intent;
+import android.view.View;
+import android.widget.Button;
+public class MainActivity extends AppCompatActivity {
+ Button b1;
+ @Override
+ protected void onCreate(Bundle savedInstanceState) {
+ super.onCreate(savedInstanceState);
+ setContentView(R.layout.activity_main);
+ b1=findViewById(R.id.b1);
+ b1.setOnClickListener(new View.OnClickListener(){
+ public void onClick(View v) {
+ Intent i = new Intent(getApplicationContext(),new1.class);
+ i.putExtra("data","Hello World");
+ startActivity(i);
+ }
+ });
+}
+}
+java 2
+package com.example.myapplication1;
+import android.content.Intent;
+import android.os.Bundle;
+import android.widget.TextView;
+import androidx.appcompat.app.AppCompatActivity;
+public class new1 extends AppCompatActivity {
+ TextView t1;
+ @Override
+ protected void onCreate(Bundle savedInstanceState) {
+ super.onCreate(savedInstanceState);
+ setContentView(R.layout.second);
+ t1 = findViewById(R.id.t1);
+ String ans = getIntent().getStringExtra("data");
+ t1.setText(ans);
+ }
+}
+xml 1
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+ xmlns:app="http://schemas.android.com/apk/res-auto"
+ xmlns:tools="http://schemas.android.com/tools"
+ android:layout_width="match_parent"
+ android:layout_height="match_parent"
+ tools:context=".MainActivity">
+ <Button
+ android:layout_width="wrap_content"
+ android:layout_height="wrap_content"
+ android:text="click here"
+ android:id= "@+id/b1" >
+ </Button>
+</LinearLayout>
+Xml 2
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+ xmlns:app="http://schemas.android.com/apk/res-auto"
+ xmlns:tools="http://schemas.android.com/tools"
+ android:layout_width="match_parent"
+ android:layout_height="match_parent"
+ tools:context=".MainActivity">
+ <TextView
+ android:layout_width="wrap_content"
+ android:layout_height="wrap_content"
+ android:text="hello"
+ android:id="@+id/t1"
+ ></TextView>
+</LinearLayout>
+Slip 7
+Q1. Create an Android Application that Demonstrate Radio Button.
+import android.os.Bundle;
+import android.widget.RadioGroup;
+import android.widget.Toast;
+import androidx.appcompat.app.AppCompatActivity;
+public class MainActivity extends AppCompatActivity {
+ @Override
+ protected void onCreate(Bundle savedInstanceState) {
+ super.onCreate(savedInstanceState);
+ setContentView(R.layout.activity_main);
+ RadioGroup radioGroup = findViewById(R.id.radioGroup);
+ radioGroup.setOnCheckedChangeListener((group, checkedId) -> {
+ switch (checkedId) {
+ case R.id.radioButton1:
+ Toast.makeText(this, "Option 1 selected", Toast.LENGTH_SHORT).show();
+ break;
+ case R.id.radioButton2:
+ Toast.makeText(this, "Option 2 selected", Toast.LENGTH_SHORT).show();
+ break;
+ // Add more cases for other radio buttons
+ }
+ });
+ }
+}
+Xml
+<!-- res/layout/activity_main.xml -->
+<LinearLayout
+ xmlns:android="http://schemas.android.com/apk/res/android"
+ xmlns:app="http://schemas.android.com/apk/res-auto"
+ xmlns:tools="http://schemas.android.com/tools"
+ android:layout_width="match_parent"
+ android:layout_height="match_parent"
+ android:orientation="vertical"
+ android:padding="16dp"
+ tools:context=".MainActivity">
+ <RadioGroup
+ android:id="@+id/radioGroup"
+ android:layout_width="match_parent"
+ android:layout_height="wrap_content"
+ android:orientation="vertical">
+ <RadioButton
+ android:id="@+id/radioButton1"
+ android:layout_width="wrap_content"
+ android:layout_height="wrap_content"
+ android:text="Option 1" />
+ <RadioButton
+ android:id="@+id/radioButton2"
+ android:layout_width="wrap_content"
+ android:layout_height="wrap_content"
+ android:text="Option 2" />
+ <!-- Add more RadioButtons as needed -->
+ </RadioGroup>
+</LinearLayout>
+Slip 9
+Q1. Write an Android application to accept two numbers from the user, and display them, but reject input if 
+both numbers are greater than 10 and asks for two new numbers.
+Java code
+// MainActivity.java
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+import androidx.appcompat.app.AppCompatActivity;
+public class MainActivity extends AppCompatActivity {
+ private EditText editText1, editText2;
+ private TextView resultTextView;
+ @Override
+ protected void onCreate(Bundle savedInstanceState) {
+ super.onCreate(savedInstanceState);
+ setContentView(R.layout.activity_main);
+ editText1 = findViewById(R.id.editText1);
+ editText2 = findViewById(R.id.editText2);
+ resultTextView = findViewById(R.id.resultTextView);
+ Button displayButton = findViewById(R.id.displayButton);
+ displayButton.setOnClickListener(new View.OnClickListener() {
+ @Override
+ public void onClick(View v) {
+ try {
+ int num1 = Integer.parseInt(editText1.getText().toString());
+ int num2 = Integer.parseInt(editText2.getText().toString());
+ if (num1 > 10 && num2 > 10) {
+ resultTextView.setText("Both numbers are greater than 10. Enter new numbers.");
+ } else {
+ resultTextView.setText("Number 1: " + num1 + "\nNumber 2: " + num2);
+ }
+ } catch (NumberFormatException e) {
+ resultTextView.setText("Invalid input. Please enter valid numbers.");
+ }
+ }
+ });
+ }
+}
+Xml code
+<LinearLayout
+ xmlns:android="http://schemas.android.com/apk/res/android"
+ xmlns:app="http://schemas.android.com/apk/res-auto"
+ xmlns:tools="http://schemas.android.com/tools"
+ android:layout_width="match_parent"
+ android:layout_height="match_parent"
+ android:orientation="vertical"
+ android:padding="16dp"
+ tools:context=".MainActivity">
+ <RadioGroup
+ android:id="@+id/radioGroup"
+ android:layout_width="match_parent"
+ android:layout_height="wrap_content"
+ android:orientation="vertical">
+ <RadioButton
+ android:id="@+id/radioButton1"
+ android:layout_width="wrap_content"
+ android:layout_height="wrap_content"
+ android:text="Option 1" />
+ <RadioButton
+ android:id="@+id/radioButton2"
+ android:layout_width="wrap_content"
+ android:layout_height="wrap_content"
+ android:text="Option 2" />
+ <!-- Add more RadioButtons as needed -->
+ </RadioGroup>
+</LinearLayout>
+Slip 10
+Q1. Create an Android Application that Demonstrate Switch and Toggle Button.
+<!-- res/layout/activity_main.xml -->
+<RelativeLayout
+ xmlns:android="http://schemas.android.com/apk/res/android"
+ xmlns:app="http://schemas.android.com/apk/res-auto"
+ xmlns:tools="http://schemas.android.com/tools"
+ android:layout_width="match_parent"
+ android:layout_height="match_parent"
+ android:padding="16dp"
+ tools:context=".MainActivity">
+ <Switch
+ android:id="@+id/mySwitch"
+ android:layout_width="wrap_content"
+ android:layout_height="wrap_content"
+ android:text="Switch Example"
+ android:layout_centerHorizontal="true" />
+ <ToggleButton
+ android:id="@+id/myToggleButton"
+ android:layout_width="wrap_content"
+ android:layout_height="wrap_content"
+ android:text="Toggle Example"
+ android:layout_below="@id/mySwitch"
+ android:layout_centerHorizontal="true" />
+ <!-- Add a TextView to display state changes if needed -->
+</RelativeLayout>
+Java code
+import android.os.Bundle;
+import android.widget.CompoundButton;
+import android.widget.Switch;
+import android.widget.ToggleButton;
+import androidx.appcompat.app.AppCompatActivity;
+public class MainActivity extends AppCompatActivity {
+ @Override
+ protected void onCreate(Bundle savedInstanceState) {
+ super.onCreate(savedInstanceState);
+ setContentView(R.layout.activity_main);
+ Switch mySwitch = findViewById(R.id.mySwitch);
+ ToggleButton myToggleButton = findViewById(R.id.myToggleButton);
+ mySwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+ // Handle switch state change (on/off)
+ // Update TextView if needed
+ });
+ myToggleButton.setOnCheckedChangeListener((buttonView, isChecked) -> {
+ // Handle toggle button state change (on/off)
+ // Update TextView if needed
+ });
+ }
+}
+Slip 11
+Q1. Create android application to change Font Size, Color and Font Family of String.
+Xml
+<!-- res/layout/activity_main.xml -->
+<RelativeLayout
+ xmlns:android="http://schemas.android.com/apk/res/android"
+ android:layout_width="match_parent"
+ android:layout_height="match_parent"
+ android:padding="16dp">
+ <TextView
+ android:id="@+id/customTextView"
+ android:layout_width="wrap_content"
+ android:layout_height="wrap_content"
+ android:text="Hello, Font Customization!"
+ android:textSize="18sp"
+ android:textColor="#000000"
+ android:fontFamily="sans-serif" />
+ <!-- Add buttons or other controls for customization -->
+</RelativeLayout>
+Java 
+import android.os.Bundle;
+import android.view.View;
+import android.widget.TextView;
+import androidx.appcompat.app.AppCompatActivity;
+public class MainActivity extends AppCompatActivity {
+ private TextView customTextView;
+ @Override
+ protected void onCreate(Bundle savedInstanceState) {
+ super.onCreate(savedInstanceState);
+ setContentView(R.layout.activity_main);
+ customTextView = findViewById(R.id.customTextView);
+ // Implement button click listeners to customize font properties
+ // Example: Change font size, color, and family dynamically
+ }
+}
+Slip 13 and 16
+Q.1Create following Vertical Scroll View Creation in Android.
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+ android:layout_height="match_parent"
+ android:layout_width="match_parent"
+ xmlns:android="http://schemas.android.com/apk/res/android">
+ <LinearLayout
+ android:layout_height="match_parent"
+ android:layout_width="match_parent"
+ android:orientation="vertical"
+ >
+ <Button
+ android:layout_width="wrap_content"
+ android:layout_height="wrap_content"
+ android:text="Button 1"
+ android:textSize="10sp"
+ android:layout_marginTop="20dp"/>
+ <Button
+ android:layout_width="wrap_content"
+ android:layout_height="wrap_content"
+ android:text="Button 2"
+ android:textSize="10sp"
+ android:layout_marginTop="20dp"/>
+ <Button
+ android:layout_width="wrap_content"
+ android:layout_height="wrap_content"
+ android:text="Button 3"
+ android:textSize="10sp"
+ android:layout_marginTop="20dp"/>
+ <Button
+ android:layout_width="wrap_content"
+ android:layout_height="wrap_content"
+ android:text="Button 4"
+ android:textSize="10sp"
+ android:layout_marginTop="20dp"/>
+ <Button
+ android:layout_width="wrap_content"
+ android:layout_height="wrap_content"
+ android:text="Button 5"
+ android:textSize="10sp"
+ android:layout_marginTop="20dp"/>
+ </LinearLayout>
+</ScrollView>
