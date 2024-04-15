@@ -1,0 +1,82 @@
+package main
+import (
+    "fmt"
+)
+
+func main() {
+    var num int
+    fmt.Println("Enter a number:")
+    fmt.Scanln(&num)
+
+    if isPalindrome(num) {
+        fmt.Println(num, "is a palindrome")
+    } else {
+        fmt.Println(num, "is not a palindrome")
+    }
+}
+
+func isPalindrome(num int) bool {
+    
+    var reverse int = 0
+    originalNum := num
+
+    
+    for num > 0 {
+        digit := num % 10
+        reverse = reverse*10 + digit
+        num /= 10
+    }
+
+    return originalNum == reverse
+}
+
+
+
+
+
+package main
+
+import (
+    "fmt"
+)
+
+type Employee struct {
+    eno    int
+    ename  string
+    salary float64
+}
+
+func main() {
+    var n int
+    fmt.Println("Enter the number of employees:")
+    fmt.Scanln(&n)
+
+    employees := make([]Employee, n)
+
+    // Accepting employee records
+    for i := 0; i < n; i++ {
+        fmt.Printf("Enter details for employee %d:\n", i+1)
+        fmt.Println("Employee Number:")
+        fmt.Scanln(&employees[i].eno)
+        fmt.Println("Employee Name:")
+        fmt.Scanln(&employees[i].ename)
+        fmt.Println("Employee Salary:")
+        fmt.Scanln(&employees[i].salary)
+    }
+
+    // Finding maximum salary
+    maxSalary := employees[0].salary
+    maxIndex := 0
+    for i := 1; i < n; i++ {
+        if employees[i].salary > maxSalary {
+            maxSalary = employees[i].salary
+            maxIndex = i
+        }
+    }
+
+    // Displaying record of employee with maximum salary
+    fmt.Println("Employee with maximum salary:")
+    fmt.Printf("Employee Number: %d\n", employees[maxIndex].eno)
+    fmt.Printf("Employee Name: %s\n", employees[maxIndex].ename)
+    fmt.Printf("Employee Salary: %.2f\n", employees[maxIndex].salary)
+}

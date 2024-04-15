@@ -1,0 +1,288 @@
+Slip 13
+Q1. Create following Vertical Scroll View Creation in Android. [10 Marks]
+Solution:
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+ xmlns:app="http://schemas.android.com/apk/res-auto"
+ xmlns:tools="http://schemas.android.com/tools"
+ android:layout_width="match_parent"
+ android:layout_height="match_parent"
+ android:orientation="vertical"
+ tools:context=".MainActivity">
+ 
+ <ScrollView
+ android:layout_width="match_parent"
+ android:layout_height="match_parent"
+ android:orientation="vertical"
+ >
+ <LinearLayout
+ android:layout_width="match_parent"
+ android:layout_height="match_parent"
+ android:orientation="vertical"
+ >
+ <Button
+ android:layout_width="match_parent"
+ android:layout_height="wrap_content"
+ android:layout_margin="30dp"
+ android:text="Button 1"
+ /><Button
+ android:layout_width="match_parent"
+ android:layout_height="wrap_content"
+ android:layout_margin="30dp"
+ android:text="Button 2"
+ /><Button
+ android:layout_width="match_parent"
+ android:layout_height="wrap_content"
+ android:layout_margin="30dp"
+ android:text="Button 3"
+ /><Button
+ android:layout_width="match_parent"
+ android:layout_height="wrap_content"
+ android:layout_margin="30dp"
+ android:text="Button 4"
+ /><Button
+ android:layout_width="match_parent"
+ android:layout_height="wrap_content"
+ android:layout_margin="30dp"
+ android:text="Button 5"
+ /><Button
+ android:layout_width="match_parent"
+ android:layout_height="wrap_content"
+ android:layout_margin="30dp"
+ android:text="Button 6"
+ /><Button
+ android:layout_width="match_parent"
+ android:layout_height="wrap_content"
+ android:layout_margin="30dp"
+ android:text="Button 7"
+ /><Button
+ android:layout_width="match_parent"
+ android:layout_height="wrap_content"
+ android:layout_margin="30dp"
+ android:text="Button 8"
+ /><Button
+ android:layout_width="match_parent"
+ android:layout_height="wrap_content"
+ android:layout_margin="30dp"
+ android:text="Button 9"
+ /><Button
+ android:layout_width="match_parent"
+ android:layout_height="wrap_content"
+ android:layout_margin="30dp"
+ android:text="Button 10"
+ />
+ </LinearLayout>
+ </ScrollView>
+ <Button
+ android:layout_width="match_parent"
+ android:layout_height="wrap_content"
+ android:layout_margin="30dp"
+ android:id="@+id/send"
+ android:text="Button 1"
+ />
+</LinearLayout>
+Q2. Write a program to search a specific location on Google Map. [20 Marks] 
+Solution:
+<RelativeLayout 
+xmlns:android="http://schemas.android.com/apk/res/android"
+ xmlns:tools="http://schemas.android.com/tools"
+ android:layout_width="match_parent"
+ android:layout_height="match_parent"
+ tools:context=".MapsActivity">
+ <fragment
+ android:id="@+id/map"
+ android:name="com.google.android.gms.maps.SupportMapFragment"
+ android:layout_width="match_parent"
+ android:layout_height="match_parent" />
+ <EditText
+ android:id="@+id/search_edit_text"
+ android:layout_width="match_parent"
+ android:layout_height="wrap_content"
+ android:hint="Search Location"
+ android:layout_margin="16dp"
+ android:padding="8dp"
+ android:background="@android:drawable/editbox_background"/>
+ <Button
+ android:id="@+id/search_button"
+ android:layout_width="wrap_content"
+ android:layout_height="wrap_content"
+ android:layout_below="@id/search_edit_text"
+ android:layout_alignParentEnd="true"
+ android:layout_marginEnd="16dp"
+ android:layout_marginTop="8dp"
+ android:text="Search"/>
+</RelativeLayout>
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import androidx.fragment.app.FragmentActivity;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+public class MapsActivity extends FragmentActivity implements 
+OnMapReadyCallback {
+ private GoogleMap mMap;
+ private EditText searchEditText;
+ private Button searchButton;
+ @Override
+ protected void onCreate(Bundle savedInstanceState) {
+ super.onCreate(savedInstanceState);
+ setContentView(R.layout.activity_maps);
+ searchEditText = findViewById(R.id.search_edit_text);
+ searchButton = findViewById(R.id.search_button);
+ SupportMapFragment mapFragment = (SupportMapFragment) 
+getSupportFragmentManager()
+ .findFragmentById(R.id.map);
+ mapFragment.getMapAsync(this);
+ searchButton.setOnClickListener(new View.OnClickListener() {
+ @Override
+ public void onClick(View v) {
+ searchLocation();
+ }
+ });
+ }
+ @Override
+ public void onMapReady(GoogleMap googleMap) {
+ mMap = googleMap;
+ }
+ private void searchLocation() {
+ String location = searchEditText.getText().toString();
+ // Use the Google Places API to search for the location
+ // Obtain the LatLng coordinates of the location
+ // For demonstration, let's assume the coordinates are obtained and 
+stored in 'latLng'
+ LatLng latLng = new LatLng(40.7128, -74.0060);
+ // Add a marker at the searched location and move the camera
+ mMap.clear(); // Clear previous markers
+ mMap.addMarker(new MarkerOptions().position(latLng).title("Searched 
+Location"));
+ mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15)); 
+// Zoom level 15
+ }
+}
+OR 
+Q2. Write an application to accept a teacher name from user and display the 
+names of students along with subjects to whom they are teaching.
+Create table Student (sno , s_name,s_class,s_addr) 
+Teacher (tno, t_name, qualification, experience) 
+Student-Teacher has Many to Many relationship. [20 Marks]
+Solution:
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout 
+xmlns:android="http://schemas.android.com/apk/res/android"
+ android:layout_width="match_parent"
+ android:layout_height="match_parent"
+ android:padding="16dp">
+ <EditText
+ android:id="@+id/teacher_name_input"
+ android:layout_width="match_parent"
+ android:layout_height="wrap_content"
+ android:hint="Enter Teacher Name"
+ android:inputType="text" />
+ <Button
+ android:id="@+id/search_button"
+ android:layout_width="wrap_content"
+ android:layout_height="wrap_content"
+ android:layout_below="@id/teacher_name_input"
+ android:layout_marginTop="16dp"
+ android:text="Search" />
+ <TextView
+ android:id="@+id/result_text"
+ android:layout_width="match_parent"
+ android:layout_height="wrap_content"
+ android:layout_below="@id/search_button"
+ android:layout_marginTop="16dp"
+ android:text=""
+ android:textSize="16sp" />
+</RelativeLayout>
+MainActivity.java
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
+import androidx.appcompat.app.AppCompatActivity;
+public class MainActivity extends AppCompatActivity {
+ private EditText teacherNameInput;
+ private Button searchButton;
+ private TextView resultText;
+ private DatabaseHelper dbHelper;
+ @Override
+ protected void onCreate(Bundle savedInstanceState) {
+ super.onCreate(savedInstanceState);
+ setContentView(R.layout.activity_main);
+ teacherNameInput = findViewById(R.id.teacher_name_input);
+ searchButton = findViewById(R.id.search_button);
+ resultText = findViewById(R.id.result_text);
+ dbHelper = new DatabaseHelper(this);
+ searchButton.setOnClickListener(new View.OnClickListener() {
+ @Override
+ public void onClick(View v) {
+ searchTeacher();
+ }
+ });
+ }
+ private void searchTeacher() {
+ String teacherName = teacherNameInput.getText().toString().trim();
+ if (teacherName.isEmpty()) {
+ Toast.makeText(this, "Please enter a teacher name", 
+Toast.LENGTH_SHORT).show();
+ return;
+ }
+ SQLiteDatabase db = dbHelper.getReadableDatabase();
+ String[] projection = {"s_name", "subject"};
+ String selection = "t_name=?";
+ String[] selectionArgs = {teacherName};
+ Cursor cursor = db.query("StudentTeacher", projection, selection, 
+selectionArgs, null, null, null);
+ StringBuilder result = new StringBuilder();
+ while (cursor.moveToNext()) {
+ String studentName = 
+cursor.getString(cursor.getColumnIndex("s_name"));
+ String subject = cursor.getString(cursor.getColumnIndex("subject"));
+ result.append(studentName).append(" -
+").append(subject).append("\n");
+ }
+ cursor.close();
+ db.close();
+ if (result.length() > 0) {
+ resultText.setText(result.toString());
+ } else {
+ resultText.setText("No data found for the given teacher name.");
+ }
+ }
+}
+DatabaseHelper class
+import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+public class DatabaseHelper extends SQLiteOpenHelper {
+ private static final String DATABASE_NAME = "SchoolDB";
+ private static final int DATABASE_VERSION = 1;
+ public DatabaseHelper(Context context) {
+ super(context, DATABASE_NAME, null, DATABASE_VERSION);
+ }
+ @Override
+ public void onCreate(SQLiteDatabase db) {
+ db.execSQL("CREATE TABLE IF NOT EXISTS Student (sno INTEGER PRIMARY 
+KEY, s_name TEXT, s_class TEXT, s_addr TEXT)");
+ db.execSQL("CREATE TABLE IF NOT EXISTS Teacher (tno INTEGER PRIMARY 
+KEY, t_name TEXT, qualification TEXT, experience INTEGER)");
+ db.execSQL("CREATE TABLE IF NOT EXISTS StudentTeacher (sno INTEGER, 
+tno INTEGER, subject TEXT, PRIMARY KEY (sno, tno))");
+ }
+ @Override
+ public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+ db.execSQL("DROP TABLE IF EXISTS Student");
+ db.execSQL("DROP TABLE IF EXISTS Teacher");
+ db.execSQL("DROP TABLE IF EXISTS StudentTeacher");
+ onCreate(db);
+ }
+}

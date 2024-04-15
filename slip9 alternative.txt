@@ -1,0 +1,289 @@
+
+Slip 9
+Q1. Write an Android application to accept two numbers from the user, and 
+display them, but reject input if both numbers are greater than 10 and asks for 
+two new numbers. [10 Marks] 
+Solution:
+Activity_main.xml
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:orientation="vertical"
+android:gravity="center"
+tools:context=".MainActivity">
+<com.google.android.material.textfield.TextInputLayout
+android:layout_width="match_parent"
+android:layout_margin="20dp"
+android:hint="Enter 1st number"
+android:layout_height="wrap_content">
+<EditText
+android:layout_width="match_parent"
+android:id="@+id/num1"
+android:layout_height="wrap_content"
+/>
+</com.google.android.material.textfield.TextInputLayout>
+<com.google.android.material.textfield.TextInputLayout
+android:layout_width="match_parent"
+android:layout_margin="20dp"
+android:hint="Enter 2nd number"
+android:layout_height="wrap_content">
+<EditText
+android:layout_width="match_parent"
+android:id="@+id/num2"
+android:layout_height="wrap_content"
+/>
+</com.google.android.material.textfield.TextInputLayout>
+<Button
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+android:text="submit"
+android:layout_margin="10dp"
+android:id="@+id/submit"
+/>
+<TextView
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+android:text="Output:- "
+android:textColor="@color/black"
+android:textSize="20sp"
+android:layout_margin="20dp"
+android:id="@+id/output"
+/>
+</LinearLayout>
+MainActivity.java
+package com.example.collegepractical;
+import androidx.appcompat.app.AppCompatActivity;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+public class MainActivity extends AppCompatActivity {
+@Override
+protected void onCreate(Bundle savedInstanceState) {
+super.onCreate(savedInstanceState);
+setContentView(R.layout.activity_main);
+EditText num1 = findViewById(R.id.num1);
+EditText num2 = findViewById(R.id.num2);
+TextView out = findViewById(R.id.output);
+Button submit = findViewById(R.id.submit);
+submit.setOnClickListener(new View.OnClickListener() {
+@Override
+public void onClick(View v) {
+int number1 = Integer.parseInt(num1.getText().toString());
+int number2 = Integer.parseInt(num2.getText().toString());
+if (number1>10)
+{
+num1.setError("Number should be less than 10..");
+}else if (number2>10)
+{
+num2.setError("Number should be less than 10..");
+}
+else
+{
+out.setText("Number 1:- "+number1+"\n\nNumber 2 :-
+"+number2);
+}
+}
+});
+}
+}
+Q2. Write a program to find the specific location of an Android device and 
+display details of the place like Address line, city with Geocoding. [20 Marks] 
+OR 
+Q2. Create table Company (id, name, address, phno). Create Application for 
+Performing the following operation on the table. 
+a) Insert New Company details.
+b) Show All Company details
+Solution:
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+ android:layout_width="match_parent"
+ android:layout_height="match_parent"
+ android:orientation="vertical"
+ android:padding="16dp">
+ <EditText
+ android:id="@+id/editTextName"
+ android:layout_width="match_parent"
+ android:layout_height="wrap_content"
+ android:hint="Company Name"/>
+ <EditText
+ android:id="@+id/editTextAddress"
+ android:layout_width="match_parent"
+ android:layout_height="wrap_content"
+ android:hint="Address"/>
+ <EditText
+ android:id="@+id/editTextPhone"
+ android:layout_width="match_parent"
+ android:layout_height="wrap_content"
+ android:hint="Phone Number"
+ android:inputType="phone"/>
+ <Button
+ android:id="@+id/btnInsert"
+ android:layout_width="wrap_content"
+ android:layout_height="wrap_content"
+ android:text="Insert"/>
+ <Button
+ android:id="@+id/btnShowAll"
+ android:layout_width="wrap_content"
+ android:layout_height="wrap_content"
+ android:text="Show All"/>
+ <TextView
+ android:id="@+id/textViewResults"
+ android:layout_width="match_parent"
+ android:layout_height="wrap_content"
+ android:layout_marginTop="16dp"
+ android:textSize="18sp"/>
+</LinearLayout>
+MainActivity.java
+import android.content.ContentValues;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
+import androidx.appcompat.app.AppCompatActivity;
+public class MainActivity extends AppCompatActivity {
+ private EditText editTextName, editTextAddress, editTextPhone;
+ private Button btnInsert, btnShowAll;
+ private TextView textViewResults;
+ private CompanyDBHelper dbHelper;
+ @Override
+ protected void onCreate(Bundle savedInstanceState) {
+ super.onCreate(savedInstanceState);
+ setContentView(R.layout.activity_main);
+ dbHelper = new CompanyDBHelper(this);
+ editTextName = findViewById(R.id.editTextName);
+ editTextAddress = findViewById(R.id.editTextAddress);
+ editTextPhone = findViewById(R.id.editTextPhone);
+ btnInsert = findViewById(R.id.btnInsert);
+ btnShowAll = findViewById(R.id.btnShowAll);
+ textViewResults = findViewById(R.id.textViewResults);
+ btnInsert.setOnClickListener(new View.OnClickListener() {
+ @Override
+ public void onClick(View v) {
+ insertCompany();
+ }
+ });
+ btnShowAll.setOnClickListener(new View.OnClickListener() {
+ @Override
+ public void onClick(View v) {
+ showAllCompanies();
+ }
+ });
+ }
+ private void insertCompany() {
+ String name = editTextName.getText().toString().trim();
+ String address = editTextAddress.getText().toString().trim();
+ String phone = editTextPhone.getText().toString().trim();
+ if (name.isEmpty() || address.isEmpty() || phone.isEmpty()) {
+ Toast.makeText(this, "Please fill in all fields", 
+Toast.LENGTH_SHORT).show();
+ return;
+ }
+ SQLiteDatabase db = dbHelper.getWritableDatabase();
+ ContentValues values = new ContentValues();
+ values.put(CompanyContract.CompanyEntry.COLUMN_NAME_NAME, 
+name);
+ values.put(CompanyContract.CompanyEntry.COLUMN_NAME_ADDRESS, 
+address);
+ values.put(CompanyContract.CompanyEntry.COLUMN_NAME_PHONE, 
+phone);
+ long newRowId = 
+db.insert(CompanyContract.CompanyEntry.TABLE_NAME, null, values);
+ if (newRowId == -1) {
+ Toast.makeText(this, "Error inserting company", 
+Toast.LENGTH_SHORT).show();
+ } else {
+ Toast.makeText(this, "Company inserted with ID " + newRowId, 
+Toast.LENGTH_SHORT).show();
+ editTextName.getText().clear();
+ editTextAddress.getText().clear();
+ editTextPhone.getText().clear();
+ }
+ }
+ private void showAllCompanies() {
+ SQLiteDatabase db = dbHelper.getReadableDatabase();
+ Cursor cursor = db.query(
+ CompanyContract.CompanyEntry.TABLE_NAME,
+ null,
+ null,
+ null,
+ null,
+ null,
+ null
+ );
+ StringBuilder builder = new StringBuilder();
+ while (cursor.moveToNext()) {
+ long id = 
+cursor.getLong(cursor.getColumnIndexOrThrow(CompanyContract.CompanyEn
+try._ID));
+ String name = 
+cursor.getString(cursor.getColumnIndexOrThrow(CompanyContract.CompanyE
+ntry.COLUMN_NAME_NAME));
+ String address = 
+cursor.getString(cursor.getColumnIndexOrThrow(CompanyContract.CompanyE
+ntry.COLUMN_NAME_ADDRESS));
+ String phone = 
+cursor.getString(cursor.getColumnIndexOrThrow(CompanyContract.CompanyE
+ntry.COLUMN_NAME_PHONE));
+ builder.append("ID: ").append(id).append(", Name: ").append(name)
+ .append(", Address: ").append(address).append(", Phone: 
+").append(phone)
+ .append("\n");
+ }
+ cursor.close();
+ textViewResults.setText(builder.toString());
+ }
+}
+CompanyContract.java
+import android.provider.BaseColumns;
+public final class CompanyContract {
+ private CompanyContract() {}
+ public static class CompanyEntry implements BaseColumns {
+ public static final String TABLE_NAME = "company";
+ public static final String COLUMN_NAME_NAME = "name";
+ public static final String COLUMN_NAME_ADDRESS = "address";
+ public static final String COLUMN_NAME_PHONE = "phone";
+ }
+}
+CompanyDBHelper.java
+import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+public class CompanyDBHelper extends SQLiteOpenHelper {
+ public static final int DATABASE_VERSION = 1;
+ public static final String DATABASE_NAME = "Company.db";
+ private static final String SQL_CREATE_ENTRIES =
+ "CREATE TABLE " + CompanyContract.CompanyEntry.TABLE_NAME + " (" 
++
+ CompanyContract.CompanyEntry._ID + " INTEGER PRIMARY KEY," +
+ CompanyContract.CompanyEntry.COLUMN_NAME_NAME + " 
+TEXT," +
+ CompanyContract.CompanyEntry.COLUMN_NAME_ADDRESS + " 
+TEXT," +
+ CompanyContract.CompanyEntry.COLUMN_NAME_PHONE + " 
+TEXT)";
+ private static final String SQL_DELETE_ENTRIES =
+ "DROP TABLE IF EXISTS " + 
+CompanyContract.CompanyEntry.TABLE_NAME;
+ public CompanyDBHelper(Context context) {
+ super(context, DATABASE_NAME, null, DATABASE_VERSION);
+ }
+ @Override
+ public void onCreate(SQLiteDatabase db) {
+ db.execSQL(SQL_CREATE_ENTRIES);
+ }
+ @Override
+ public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+ db.execSQL(SQL_DELETE_ENTRIES);
+ onCreate(db);
+ }
+}
