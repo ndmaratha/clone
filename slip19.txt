@@ -118,87 +118,299 @@ question 2
 
 ///////////////Mainactivity.java
 
-package com.example.testing;
-
-import android.Manifest;
-import android.app.PendingIntent;
+package com.example.testing;// MainActivity.java
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.telephony.SmsManager;
+
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
+import android.widget.CheckBox;
+import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final int REQUEST_SEND_SMS = 1;
+    private EditText fullNameEditText, currentWeightEditText, heightEditText,
+            goalWeightEditText, ageEditText, phoneNumberEditText, addressEditText;
+    private RadioGroup genderRadioGroup;
+    private RadioButton selectedGenderRadioButton;
+    private CheckBox membershipRulesCheckBox;
+    private Button submitButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Button sendButton = findViewById(R.id.send_button);
-        sendButton.setOnClickListener(new View.OnClickListener() {
+        // Initialize views
+        fullNameEditText = findViewById(R.id.editTextText);
+        currentWeightEditText = findViewById(R.id.editTextText2);
+        heightEditText = findViewById(R.id.editTextText3);
+        goalWeightEditText = findViewById(R.id.editTextText4);
+        ageEditText = findViewById(R.id.editTextText5);
+        phoneNumberEditText = findViewById(R.id.editTextText8);
+        addressEditText = findViewById(R.id.editTextText9);
+        genderRadioGroup = findViewById(R.id.genderRadioGroup);
+        membershipRulesCheckBox = findViewById(R.id.checkBox);
+        submitButton = findViewById(R.id.button);
+
+        // Set onClickListener for submit button
+        submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED) {
-                    ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.SEND_SMS}, REQUEST_SEND_SMS);
-                } else {
-                    sendSMS();
-                }
+                // Get user input
+                String fullName = fullNameEditText.getText().toString();
+                String currentWeight = currentWeightEditText.getText().toString();
+                String height = heightEditText.getText().toString();
+                String goalWeight = goalWeightEditText.getText().toString();
+                String age = ageEditText.getText().toString();
+                String phoneNumber = phoneNumberEditText.getText().toString();
+                String address = addressEditText.getText().toString();
+                boolean membershipRulesAccepted = membershipRulesCheckBox.isChecked();
+
+                // Get selected gender
+                int selectedGenderId = genderRadioGroup.getCheckedRadioButtonId();
+                selectedGenderRadioButton = findViewById(selectedGenderId);
+                String gender = selectedGenderRadioButton.getText().toString();
+
+                // Create intent to start DisplayActivity
+                Intent intent = new Intent(MainActivity.this, DisplayActivity.class);
+                // Pass data to DisplayActivity
+                intent.putExtra("fullName", fullName);
+                intent.putExtra("currentWeight", currentWeight);
+                intent.putExtra("height", height);
+                intent.putExtra("goalWeight", goalWeight);
+                intent.putExtra("age", age);
+                intent.putExtra("phoneNumber", phoneNumber);
+                intent.putExtra("address", address);
+                intent.putExtra("gender", gender);
+                intent.putExtra("membershipRulesAccepted", membershipRulesAccepted);
+                startActivity(intent);
             }
         });
     }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == REQUEST_SEND_SMS) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                sendSMS();
-            } else {
-                Toast.makeText(MainActivity.this, "Permission denied", Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
-    private void sendSMS() {
-        String phoneNumber = "1234567890"; // Replace with the recipient's phone number
-        String message = "Hello! This is a test message.";
-
-        SmsManager smsManager = SmsManager.getDefault();
-        PendingIntent sentIntent = PendingIntent.getBroadcast(this, 0, new Intent("SMS_SENT"), PendingIntent.FLAG_IMMUTABLE); // Add FLAG_IMMUTABLE
-        PendingIntent deliveredIntent = PendingIntent.getBroadcast(this, 0, new Intent("SMS_DELIVERED"), PendingIntent.FLAG_IMMUTABLE); // Add FLAG_IMMUTABLE
-
-        smsManager.sendTextMessage(phoneNumber, null, message, sentIntent, deliveredIntent);
-
-        Toast.makeText(MainActivity.this, "SMS sent", Toast.LENGTH_SHORT).show();
-    }
-
 }
 
 
 
-/////////////////////////xml file
+/////////////////////////xml file activity_main
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <!-- Membership Form TextView -->
+    <TableRow>
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Membership Form"
+            android:textColor="#EA0B0B"
+            android:textSize="20sp" />
+    </TableRow>
+
+    <!-- Full Name EditText -->
+    <TableRow>
+        <EditText
+            android:id="@+id/editTextText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Full Name"
+            android:inputType="text" />
+    </TableRow>
+
+    <!-- Gender TextView -->
+    <TableRow>
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Gender"
+            android:textSize="15sp" />
+    </TableRow>
+
+    <!-- RadioGroup for Gender -->
+    <TableRow>
+        <RadioGroup
+            android:id="@+id/genderRadioGroup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/radioButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Male" />
+
+            <RadioButton
+                android:id="@+id/radioButton2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Female" />
+
+            <RadioButton
+                android:id="@+id/radioButton3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Others" />
+        </RadioGroup>
+    </TableRow>
+
+    <!-- Current Weight EditText -->
+    <TableRow>
+        <EditText
+            android:id="@+id/editTextText2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Current Weight"
+            android:inputType="numberDecimal" />
+    </TableRow>
+
+    <!-- Height EditText -->
+    <TableRow>
+        <EditText
+            android:id="@+id/editTextText3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Height"
+            android:inputType="text" />
+    </TableRow>
+
+    <!-- Goal Weight EditText -->
+    <TableRow>
+        <EditText
+            android:id="@+id/editTextText4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Goal Weight"
+            android:inputType="text" />
+    </TableRow>
+
+    <!-- Age EditText -->
+    <TableRow>
+        <EditText
+            android:id="@+id/editTextText5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Age"
+            android:inputType="text" />
+    </TableRow>
+
+    <!-- Phone Number EditText -->
+    <TableRow>
+        <EditText
+            android:id="@+id/editTextText8"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Phone Number"
+            android:inputType="phone" />
+    </TableRow>
+
+    <!-- Address EditText -->
+    <TableRow>
+        <EditText
+            android:id="@+id/editTextText9"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Address"
+            android:inputType="textPostalAddress" />
+    </TableRow>
+
+    <!-- Membership Rules CheckBox -->
+    <TableRow>
+        <CheckBox
+            android:id="@+id/checkBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="I have read and Understood Membership Rules" />
+    </TableRow>
+
+    <!-- Submit Button -->
+    <TableRow>
+        <Button
+            android:id="@+id/button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Submit" />
+    </TableRow>
+
+</TableLayout>
+
+
+
+///////////////////////////////DisplayActivity.java
+
+package com.example.testing;
+
+// DisplayActivity.java
+import android.content.Intent;
+import android.os.Bundle;
+
+import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+public class DisplayActivity extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_display);
+
+        // Get data from intent
+        Intent intent = getIntent();
+        String fullName = intent.getStringExtra("fullName");
+        String currentWeight = intent.getStringExtra("currentWeight");
+        String height = intent.getStringExtra("height");
+        String goalWeight = intent.getStringExtra("goalWeight");
+        String age = intent.getStringExtra("age");
+        String phoneNumber = intent.getStringExtra("phoneNumber");
+        String address = intent.getStringExtra("address");
+        String gender = intent.getStringExtra("gender");
+        boolean membershipRulesAccepted = intent.getBooleanExtra("membershipRulesAccepted", false);
+
+        // Display data in TextView
+        TextView displayTextView = findViewById(R.id.displayTextView);
+        displayTextView.setText("Full Name: " + fullName + "\n" +
+                "Current Weight: " + currentWeight + "\n" +
+                "Height: " + height + "\n" +
+                "Goal Weight: " + goalWeight + "\n" +
+                "Age: " + age + "\n" +
+                "Phone Number: " + phoneNumber + "\n" +
+                "Address: " + address + "\n" +
+                "Gender: " + gender + "\n" +
+                "Membership Rules Accepted: " + (membershipRulesAccepted ? "Yes" : "No"));
+    }
+}
+
+
+
+//////////////////////////////activity_display.xml
 
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="16dp"
-    tools:context=".MainActivity">
+    android:layout_height="match_parent">
 
-    <Button
-        android:id="@+id/send_button"
+    <TextView
+        android:id="@+id/displayTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Send SMS"
-        android:layout_centerInParent="true" />
+        android:layout_centerInParent="true"
+        android:textSize="18sp" />
 
 </RelativeLayout>
 
@@ -214,7 +426,11 @@ public class MainActivity extends AppCompatActivity {
     <uses-feature
         android:name="android.hardware.telephony"
         android:required="false" />
-
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_INTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.SEND_SMS" />
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
@@ -238,7 +454,8 @@ public class MainActivity extends AppCompatActivity {
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-<activity android:name=".ResultActivity"></activity>
+<activity android:name=".DisplayActivity"></activity>
+
     </application>
 
 </manifest>

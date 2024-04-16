@@ -1,0 +1,71 @@
+slip 20
+
+q1 
+
+java file
+
+package com.example.testing;
+
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+public class MainActivity extends AppCompatActivity {
+
+    private ImageView imageView;
+    private Button changeButton;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        imageView = findViewById(R.id.image_view);
+        changeButton = findViewById(R.id.change_button);
+
+        // Set click listener for the button
+        changeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Change the image when the button is clicked
+                imageView.setImageResource(R.drawable.new_image);
+            }
+        });
+    }
+}
+
+
+////////////////////////xml file
+
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    tools:context=".MainActivity">
+
+    <ImageView
+        android:id="@+id/image_view"
+        android:layout_width="395dp"
+        android:layout_height="416dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/default_image" />
+
+    <Button
+        android:id="@+id/change_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/image_view"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="138dp"
+        android:layout_marginTop="113dp"
+        android:layout_marginEnd="148dp"
+        android:text="Change Image" />
+
+</RelativeLayout>

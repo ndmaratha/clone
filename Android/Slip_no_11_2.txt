@@ -1,0 +1,198 @@
+FirstActivity.java
+
+package com.example.slip_no_15;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+
+
+
+public class FirstActivity extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_first);
+
+        Button submitButton = findViewById(R.id.submit_button);
+        submitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String firstName = ((EditText) findViewById(R.id.first_name_edit_text)).getText().toString();
+                String middleName = ((EditText) findViewById(R.id.middle_name_edit_text)).getText().toString();
+                String lastName = ((EditText) findViewById(R.id.last_name_edit_text)).getText().toString();
+                String dob = ((EditText) findViewById(R.id.dob_edit_text)).getText().toString();
+                String address = ((EditText) findViewById(R.id.address_edit_text)).getText().toString();
+                String email = ((EditText) findViewById(R.id.email_edit_text)).getText().toString();
+
+                Intent intent = new Intent(FirstActivity.this, SecondActivity.class);
+                intent.putExtra("FIRST_NAME", firstName);
+                intent.putExtra("MIDDLE_NAME", middleName);
+                intent.putExtra("LAST_NAME", lastName);
+                intent.putExtra("DOB", dob);
+                intent.putExtra("ADDRESS", address);
+                intent.putExtra("EMAIL", email);
+                startActivity(intent);
+            }
+        });
+    }
+}
+
+activity_first.xml
+
+
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    tools:context=".FirstActivity">
+
+    <!-- EditText for First Name -->
+    <EditText
+        android:id="@+id/first_name_edit_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="First Name"/>
+
+    <!-- EditText for Middle Name -->
+    <EditText
+        android:id="@+id/middle_name_edit_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/first_name_edit_text"
+        android:hint="Middle Name"/>
+
+    <!-- EditText for Last Name -->
+    <EditText
+        android:id="@+id/last_name_edit_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/middle_name_edit_text"
+        android:hint="Last Name"/>
+
+    <!-- EditText for Date of Birth -->
+    <EditText
+        android:id="@+id/dob_edit_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/last_name_edit_text"
+        android:hint="Date of Birth"/>
+
+    <!-- EditText for Address -->
+    <EditText
+        android:id="@+id/address_edit_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/dob_edit_text"
+        android:hint="Address"/>
+
+    <!-- EditText for Email -->
+    <EditText
+        android:id="@+id/email_edit_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/address_edit_text"
+        android:hint="Email"/>
+
+    <!-- Submit Button -->
+    <Button
+        android:id="@+id/submit_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/email_edit_text"
+        android:layout_centerHorizontal="true"
+        android:text="Submit"/>
+
+</RelativeLayout>
+
+
+SecondActivity.java
+
+package com.example.slip_no_15;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.widget.TextView;
+
+
+public class SecondActivity extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_second);
+
+        Intent intent = getIntent();
+        String firstName = intent.getStringExtra("FIRST_NAME");
+        String middleName = intent.getStringExtra("MIDDLE_NAME");
+        String lastName = intent.getStringExtra("LAST_NAME");
+        String dob = intent.getStringExtra("DOB");
+        String address = intent.getStringExtra("ADDRESS");
+        String email = intent.getStringExtra("EMAIL");
+
+        TextView infoTextView = findViewById(R.id.info_text_view);
+        String info = "First Name: " + firstName + "\n" +
+                "Middle Name: " + middleName + "\n" +
+                "Last Name: " + lastName + "\n" +
+                "Date of Birth: " + dob + "\n" +
+                "Address: " + address + "\n" +
+                "Email: " + email;
+
+        infoTextView.setText(info);
+    }
+}
+
+
+
+activity_second.xml
+
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    tools:context=".SecondActivity">
+
+    <TextView
+        android:id="@+id/info_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"/>
+
+</RelativeLayout>
+
+
+manifest
+
+
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.slip_no_15">
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.Slip_no_15">
+        <activity android:name=".FirstActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".SecondActivity" />
+    </application>
+
+</manifest>

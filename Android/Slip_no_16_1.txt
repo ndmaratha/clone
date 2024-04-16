@@ -1,0 +1,194 @@
+MainActivity.java
+
+
+package com.example.slip_no_16_1;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+
+public class MainActivity extends AppCompatActivity {
+
+    EditText nameEditText, surnameEditText, classEditText, genderEditText, hobbiesEditText, marksEditText;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        nameEditText = findViewById(R.id.nameEditText);
+        surnameEditText = findViewById(R.id.surnameEditText);
+        classEditText = findViewById(R.id.classEditText);
+        genderEditText = findViewById(R.id.genderEditText);
+        hobbiesEditText = findViewById(R.id.hobbiesEditText);
+        marksEditText = findViewById(R.id.marksEditText);
+
+        Button submitButton = findViewById(R.id.submitButton);
+        submitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String name = nameEditText.getText().toString();
+                String surname = surnameEditText.getText().toString();
+                String classValue = classEditText.getText().toString();
+                String gender = genderEditText.getText().toString();
+                String hobbies = hobbiesEditText.getText().toString();
+                String marks = marksEditText.getText().toString();
+
+                Intent intent = new Intent(MainActivity.this, second.class);
+                intent.putExtra("name", name);
+                intent.putExtra("surname", surname);
+                intent.putExtra("class", classValue);
+                intent.putExtra("gender", gender);
+                intent.putExtra("hobbies", hobbies);
+                intent.putExtra("marks", marks);
+                startActivity(intent);
+            }
+        });
+    }
+}
+
+activity_main.xml
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    tools:context=".MainActivity">
+
+    <EditText
+        android:id="@+id/nameEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Name" />
+
+    <EditText
+        android:id="@+id/surnameEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Surname" />
+
+    <EditText
+        android:id="@+id/classEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Class" />
+
+    <EditText
+        android:id="@+id/genderEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Gender" />
+
+    <EditText
+        android:id="@+id/hobbiesEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Hobbies" />
+
+    <EditText
+        android:id="@+id/marksEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Marks" />
+
+    <Button
+        android:id="@+id/submitButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Submit" />
+
+</LinearLayout>
+
+
+second.java
+
+package com.example.slip_no_16_1;
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.widget.TextView;
+
+public class second extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_second);
+
+        TextView nameTextView = findViewById(R.id.nameTextView);
+        TextView surnameTextView = findViewById(R.id.surnameTextView);
+        TextView classTextView = findViewById(R.id.classTextView);
+        TextView genderTextView = findViewById(R.id.genderTextView);
+        TextView hobbiesTextView = findViewById(R.id.hobbiesTextView);
+        TextView marksTextView = findViewById(R.id.marksTextView);
+
+        Intent intent = getIntent();
+        if (intent != null) {
+            String name = intent.getStringExtra("name");
+            String surname = intent.getStringExtra("surname");
+            String classValue = intent.getStringExtra("class");
+            String gender = intent.getStringExtra("gender");
+            String hobbies = intent.getStringExtra("hobbies");
+            String marks = intent.getStringExtra("marks");
+
+            // Display data
+            nameTextView.setText("Name: " + name);
+            surnameTextView.setText("Surname: " + surname);
+            classTextView.setText("Class: " + classValue);
+            genderTextView.setText("Gender: " + gender);
+            hobbiesTextView.setText("Hobbies: " + hobbies);
+            marksTextView.setText("Marks: " + marks);
+        }
+    }
+}
+
+activity_second.xml
+
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    tools:context=".second">
+
+    <TextView
+        android:id="@+id/nameTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/surnameTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/classTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/genderTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/hobbiesTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/marksTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>
+
+
+

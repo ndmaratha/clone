@@ -214,6 +214,8 @@ activity_main.xml
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 
+
+========================================================
 ActivityMain.java
 
 package com.example.datetime;
@@ -304,7 +306,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
 
 
-
+=============================================
 
 
 AndroidMenifest.java
