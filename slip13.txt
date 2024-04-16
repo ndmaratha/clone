@@ -139,17 +139,15 @@ public class MainActivity extends AppCompatActivity {
 
 ///////q2/////
 
+DatabaseHelper.java
 
-database helper 
-
-package com.example.audio;
+package com.example.testing;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
-
     private static final String DATABASE_NAME = "SchoolDB";
     private static final int DATABASE_VERSION = 1;
 
@@ -159,91 +157,148 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("CREATE TABLE Student (sno INTEGER PRIMARY KEY, s_name TEXT, s_class TEXT, s_addr TEXT)");
-        db.execSQL("CREATE TABLE Teacher (tno INTEGER PRIMARY KEY, t_name TEXT, qualification TEXT, experience TEXT)");
-        db.execSQL("CREATE TABLE Teacher_Student (t_id INTEGER, s_id INTEGER)");
+        db.execSQL("CREATE TABLE IF NOT EXISTS Student (sno INTEGER PRIMARY KEY, s_name TEXT, s_class TEXT, s_addr TEXT)");
+        db.execSQL("CREATE TABLE IF NOT EXISTS Teacher (tno INTEGER PRIMARY KEY, t_name TEXT, qualification TEXT, experience INTEGER)");
+        db.execSQL("CREATE TABLE IF NOT EXISTS StudentTeacher (sno INTEGER, tno INTEGER, subject TEXT, PRIMARY KEY (sno, tno))");
+
+        // Insert sample data
+        insertSampleData(db);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS Student");
         db.execSQL("DROP TABLE IF EXISTS Teacher");
-        db.execSQL("DROP TABLE IF EXISTS Teacher_Student");
+        db.execSQL("DROP TABLE IF EXISTS StudentTeacher");
         onCreate(db);
+    }
+
+    private void insertSampleData(SQLiteDatabase db) {
+        // Insert sample data into the Student table
+        db.execSQL("INSERT INTO Student (sno, s_name, s_class, s_addr) VALUES (1, 'John Doe', '10A', '123 Main Street')");
+        db.execSQL("INSERT INTO Student (sno, s_name, s_class, s_addr) VALUES (2, 'Jane Smith', '11B', '456 Elm Street')");
+
+        // Insert sample data into the Teacher table
+        db.execSQL("INSERT INTO Teacher (tno, t_name, qualification, experience) VALUES (1, 'Mr. Johnson', 'Bachelor''s Degree', 5)");
+        db.execSQL("INSERT INTO Teacher (tno, t_name, qualification, experience) VALUES (2, 'Mrs. Smith', 'Master''s Degree', 10)");
+
+        // Insert sample data into the StudentTeacher table
+        db.execSQL("INSERT INTO StudentTeacher (sno, tno, subject) VALUES (1, 1, 'Mathematics')");
+        db.execSQL("INSERT INTO StudentTeacher (sno, tno, subject) VALUES (2, 2, 'English')");
     }
 }
 
 
-////main activity
 
-package com.example.audio;
 
+//////////////////////////////////MainActivity.java//////////////
+
+
+package com.example.testing;
+
+import android.content.ContentValues;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-
-
+import android.widget.Toast;
+import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
-
-    private EditText teacherNameEditText;
+    private EditText teacherNameInput;
     private Button searchButton;
-    private TextView studentInfoTextView;
+    private TextView resultText;
+    public DatabaseHelper dbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        teacherNameEditText = findViewById(R.id.teacher_name_edit_text);
+        teacherNameInput = findViewById(R.id.teacher_name_input);
         searchButton = findViewById(R.id.search_button);
-        studentInfoTextView = findViewById(R.id.student_info_text_view);
+        resultText = findViewById(R.id.result_text);
+
+        dbHelper = new DatabaseHelper(this);
 
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String teacherName = teacherNameEditText.getText().toString().trim();
-                // Perform database query to get students' info based on teacher's name
-                // Display the result in studentInfoTextView
+
+                searchTeacher();
             }
         });
     }
+
+    private void searchTeacher() {
+        String teacherName = teacherNameInput.getText().toString().trim();
+        if (teacherName.isEmpty()) {
+            Toast.makeText(this, "Please enter a teacher name", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        // Adjusted query to join StudentTeacher and Student tables
+        String query = "SELECT Student.s_name, StudentTeacher.subject FROM StudentTeacher " +
+                "INNER JOIN Student ON StudentTeacher.sno = Student.sno " +
+                "WHERE StudentTeacher.tno = (SELECT tno FROM Teacher WHERE t_name=?)";
+
+        Cursor cursor = db.rawQuery(query, new String[]{teacherName});
+
+        StringBuilder result = new StringBuilder();
+        while (cursor.moveToNext()) {
+            String studentName = cursor.getString(cursor.getColumnIndex("s_name"));
+            String subject = cursor.getString(cursor.getColumnIndex("subject"));
+            result.append(studentName).append(" - ").append(subject).append("\n");
+        }
+        cursor.close();
+        db.close();
+
+        if (result.length() > 0) {
+            resultText.setText(result.toString());
+        } else {
+            resultText.setText("No data found for the given teacher name.");
+        }
+    }
+
 }
 
 
 
-///// xml file
+/////////////////////////////xml file
 
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
-    tools:context=".MainActivity">
-
+    android:padding="16dp">
     <EditText
-        android:id="@+id/teacher_name_edit_text"
+        android:id="@+id/teacher_name_input"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Enter teacher's name" />
-
+        android:hint="Enter Teacher Name"
+        android:inputType="text" />
     <Button
         android:id="@+id/search_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/teacher_name_edit_text"
+        android:layout_below="@id/teacher_name_input"
         android:layout_marginTop="16dp"
         android:text="Search" />
-
     <TextView
-        android:id="@+id/student_info_text_view"
-        android:layout_width="wrap_content"
+        android:id="@+id/result_text"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/search_button"
-        android:layout_marginTop="16dp" />
-
+        android:layout_marginTop="16dp"
+        android:text=""
+        android:textSize="16sp" />
 </RelativeLayout>
+
+
