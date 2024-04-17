@@ -1,0 +1,69 @@
+//AndroidMenifest.xml
+
+
+ <uses-permission android:name="android.permission.BLUETOOTH"/>
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
+
+
+///////////////////////////////////////////////////////
+
+
+//activity_main.xml
+
+
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <ToggleButton
+        android:id="@+id/toggleButtonBulb"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textOff="Bulb Off"
+        android:textOn="Bulb On"
+        android:layout_centerInParent="true"/>
+
+</RelativeLayout>
+
+
+/////////////////////////////////////////////////////
+
+//MainActivity.java
+
+
+import android.app.Activity;
+import android.os.Bundle;
+import android.widget.CompoundButton;
+import android.widget.Toast;
+import android.widget.ToggleButton;
+
+public class MainActivity extends Activity {
+
+    private ToggleButton toggleButtonBulb;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        toggleButtonBulb = findViewById(R.id.toggleButtonBulb);
+
+        toggleButtonBulb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    // Bulb is turned on
+                    Toast.makeText(MainActivity.this, "Bulb turned on", Toast.LENGTH_SHORT).show();
+                    // Add logic to control actual bulb here
+                } else {
+                    // Bulb is turned off
+                    Toast.makeText(MainActivity.this, "Bulb turned off", Toast.LENGTH_SHORT).show();
+                    // Add logic to control actual bulb here
+                }
+            }
+        });
+    }
+}

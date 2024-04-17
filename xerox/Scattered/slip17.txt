@@ -1,0 +1,129 @@
+slip 17
+
+question 2
+
+
+ ///////////java file 
+
+package com.example.testing;
+
+import android.os.Bundle;
+import android.view.ContextMenu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+public class MainActivity extends AppCompatActivity {
+
+    private EditText numberEditText;
+    private Button submitButton;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        numberEditText = findViewById(R.id.edit_text_number);
+        submitButton = findViewById(R.id.button_submit);
+
+        // Register the EditText for the context menu
+        registerForContextMenu(numberEditText);
+
+        submitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openContextMenu(numberEditText);
+            }
+        });
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        menu.setHeaderTitle("Options");
+        menu.add(0, v.getId(), 0, "Calculate Factorial");
+        menu.add(0, v.getId(), 0, "Calculate Sum of Digits");
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        if (item.getTitle().equals("Calculate Factorial")) {
+            calculateFactorial();
+            return true;
+        } else if (item.getTitle().equals("Calculate Sum of Digits")) {
+            calculateSumOfDigits();
+            return true;
+        }
+        return super.onContextItemSelected(item);
+    }
+
+    private void calculateFactorial() {
+        String numberStr = numberEditText.getText().toString();
+        if (!numberStr.isEmpty()) {
+            int number = Integer.parseInt(numberStr);
+            int factorial = 1;
+            for (int i = 1; i <= number; i++) {
+                factorial *= i;
+            }
+            displayResult("Factorial: " + factorial);
+        } else {
+            displayError("Please enter a number.");
+        }
+    }
+
+    private void calculateSumOfDigits() {
+        String numberStr = numberEditText.getText().toString();
+        if (!numberStr.isEmpty()) {
+            int number = Integer.parseInt(numberStr);
+            int sum = 0;
+            while (number != 0) {
+                sum += number % 10;
+                number /= 10;
+            }
+            displayResult("Sum of Digits: " + sum);
+        } else {
+            displayError("Please enter a number.");
+        }
+    }
+
+    private void displayResult(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
+
+    private void displayError(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
+}
+
+
+////////xml file
+
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    tools:context=".MainActivity">
+
+    <EditText
+        android:id="@+id/edit_text_number"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter a number"
+        android:inputType="number" />
+
+    <Button
+        android:id="@+id/button_submit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Submit"
+        android:layout_below="@id/edit_text_number"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp" />
+
+</RelativeLayout>

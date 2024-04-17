@@ -1,0 +1,106 @@
+<!-- activity_main.xml -->
+
+
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    tools:context=".MainActivity">
+    <Button
+        android:id="@+id/btn_fetch_data"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="Fetch Data" />
+</RelativeLayout>
+
+
+
+/////////////////////////////////////////////
+
+
+// MainActivity.java
+
+
+import android.app.Activity;
+import android.app.ProgressDialog;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.Button;
+import android.widget.Toast;
+public class MainActivity extends Activity {
+    Button fetchDataButton;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        fetchDataButton = findViewById(R.id.btn_fetch_data);
+        fetchDataButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                fetchData();
+            }
+        });
+    }
+    private void fetchData() {
+        // Execute AsyncTask to fetch data
+        new FetchDataTask().execute();
+    }
+    private class FetchDataTask extends AsyncTask<Void, Integer, Boolean> {
+        ProgressDialog progressDialog;
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            // Show progress dialog before executing AsyncTask
+            progressDialog = new ProgressDialog(MainActivity.this);
+            progressDialog.setMessage("Fetching data...");
+            progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+            progressDialog.setMax(100);
+            progressDialog.setCancelable(false);
+            progressDialog.show();
+        }
+        @Override
+        protected Boolean doInBackground(Void... voids) {
+            // Simulate background operation (e.g., fetching data from server)
+            try {
+                for (int i = 0; i < 100; i++) {
+                    // Simulate network delay
+                    Thread.sleep(50);
+                    // Publish progress
+                    publishProgress(i);
+                }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+                return false;
+            }
+            // Return true if data fetching is successful, false otherwise
+            return true;
+        }
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+            super.onProgressUpdate(values);
+            // Update progress dialog
+            progressDialog.setProgress(values[0]);
+        }
+        @Override
+        protected void onPostExecute(Boolean success) {
+            super.onPostExecute(success);
+            // Dismiss progress dialog
+            progressDialog.dismiss();
+            if (success) {
+                // Data fetched successfully
+                Toast.makeText(MainActivity.this, "Data fetched successfully!",
+                        Toast.LENGTH_SHORT).show();
+            } else {
+                // Failed to fetch data
+                Toast.makeText(MainActivity.this, "Failed to fetch data!",
+                        Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+}

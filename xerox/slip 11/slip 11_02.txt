@@ -1,0 +1,226 @@
+//activity_main.xml
+
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <EditText
+        android:id="@+id/etFirstName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="First Name"
+        android:layout_margin="16dp" />
+
+    <EditText
+        android:id="@+id/etMiddleName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Middle Name"
+        android:layout_below="@id/etFirstName"
+        android:layout_margin="16dp" />
+
+    <EditText
+        android:id="@+id/etLastName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Last Name"
+        android:layout_below="@id/etMiddleName"
+        android:layout_margin="16dp" />
+
+    <EditText
+        android:id="@+id/etDOB"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Date of Birth (YYYY-MM-DD)"
+        android:layout_below="@id/etLastName"
+        android:layout_margin="16dp" />
+
+    <EditText
+        android:id="@+id/etAddress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Address"
+        android:layout_below="@id/etDOB"
+        android:layout_margin="16dp" />
+
+    <EditText
+        android:id="@+id/etEmail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Email ID"
+        android:layout_below="@id/etAddress"
+        android:layout_margin="16dp" />
+
+    <Button
+        android:id="@+id/btnSubmit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Submit"
+        android:layout_below="@id/etEmail"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="32dp" />
+
+</RelativeLayout>
+
+///////////////////////////////////////////////////////////////
+
+//MainActivity.java
+
+
+
+
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+
+
+
+public class MainActivity extends Activity {
+
+    private EditText etFirstName, etMiddleName, etLastName, etDOB, etAddress, etEmail;
+    private Button btnSubmit;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        etFirstName = findViewById(R.id.etFirstName);
+        etMiddleName = findViewById(R.id.etMiddleName);
+        etLastName = findViewById(R.id.etLastName);
+        etDOB = findViewById(R.id.etDOB);
+        etAddress = findViewById(R.id.etAddress);
+        etEmail = findViewById(R.id.etEmail);
+        btnSubmit = findViewById(R.id.btnSubmit);
+
+        btnSubmit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String firstName = etFirstName.getText().toString();
+                String middleName = etMiddleName.getText().toString();
+                String lastName = etLastName.getText().toString();
+                String dob = etDOB.getText().toString();
+                String address = etAddress.getText().toString();
+                String email = etEmail.getText().toString();
+
+                Intent intent = new Intent(getApplicationContext(), SecondActivity.class);
+                intent.putExtra("FIRST_NAME", firstName);
+                intent.putExtra("MIDDLE_NAME", middleName);
+                intent.putExtra("LAST_NAME", lastName);
+                intent.putExtra("DOB", dob);
+                intent.putExtra("ADDRESS", address);
+                intent.putExtra("EMAIL", email);
+                startActivity(intent);
+            }
+        });
+    }
+}
+
+//////////////////////////////////////////////////
+
+//activity_second.xml
+
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/tvFirstName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="First Name:"
+        android:layout_margin="16dp" />
+
+    <TextView
+        android:id="@+id/tvMiddleName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Middle Name:"
+        android:layout_below="@id/tvFirstName"
+        android:layout_margin="16dp" />
+
+    <TextView
+        android:id="@+id/tvLastName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Last Name:"
+        android:layout_below="@id/tvMiddleName"
+        android:layout_margin="16dp" />
+
+    <TextView
+        android:id="@+id/tvDOB"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Date of Birth:"
+        android:layout_below="@id/tvLastName"
+        android:layout_margin="16dp" />
+
+    <TextView
+        android:id="@+id/tvAddress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Address:"
+        android:layout_below="@id/tvDOB"
+        android:layout_margin="16dp" />
+
+    <TextView
+        android:id="@+id/tvEmail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Email ID:"
+        android:layout_below="@id/tvAddress"
+        android:layout_margin="16dp" />
+
+</RelativeLayout>
+
+//////////////////////////////////////////////////////
+
+//SecondActivity.java
+
+package com.example.myapplication;
+
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.widget.TextView;
+
+
+
+public class SecondActivity extends Activity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_second);
+
+        TextView tvFirstName = findViewById(R.id.tvFirstName);
+        TextView tvMiddleName = findViewById(R.id.tvMiddleName);
+        TextView tvLastName = findViewById(R.id.tvLastName);
+        TextView tvDOB = findViewById(R.id.tvDOB);
+        TextView tvAddress = findViewById(R.id.tvAddress);
+        TextView tvEmail = findViewById(R.id.tvEmail);
+
+        Intent intent = getIntent();
+        if (intent != null) {
+            String firstName = intent.getStringExtra("FIRST_NAME");
+            String middleName = intent.getStringExtra("MIDDLE_NAME");
+            String lastName = intent.getStringExtra("LAST_NAME");
+            String dob = intent.getStringExtra("DOB");
+            String address = intent.getStringExtra("ADDRESS");
+            String email = intent.getStringExtra("EMAIL");
+
+            tvFirstName.setText("First Name: " + firstName);
+            tvMiddleName.setText("Middle Name: " + middleName);
+            tvLastName.setText("Last Name: " + lastName);
+            tvDOB.setText("Date of Birth: " + dob);
+            tvAddress.setText("Address: " + address);
+            tvEmail.setText("Email ID: " + email);
+        }
+    }
+}
+

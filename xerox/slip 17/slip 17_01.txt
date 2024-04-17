@@ -1,0 +1,63 @@
+//activity_main.xml
+
+
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <Button
+        android:id="@+id/btnMakeCall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Make Phone Call"
+        android:layout_centerInParent="true"/>
+
+</RelativeLayout>
+
+
+/////////////////////////////////
+
+//MainActivity.java
+
+import android.app.Activity;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+
+public class MainActivity extends Activity {
+    private Button btnMakeCall;
+    private static final String PHONE_NUMBER = "1234567890"; // Replace with the desired phone number
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        btnMakeCall = findViewById(R.id.btnMakeCall);
+
+        btnMakeCall.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                makePhoneCall();
+            }
+        });
+    }
+
+    private void makePhoneCall() {
+        // Create intent with ACTION_DIAL to initiate a phone call
+        Intent intent = new Intent(Intent.ACTION_DIAL);
+        intent.setData(Uri.parse("tel:" + PHONE_NUMBER));
+
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            startActivity(intent);
+        } else {
+            // Handle case where no activity can handle the intent (e.g., no phone app)
+            // You can show a message or log an error here
+        }
+    }
+}
